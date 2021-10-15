@@ -1,0 +1,5 @@
+[workspace]
+members = [
+    "itoobao/web-wasm",
+    "itoobao/web-server"
+]
