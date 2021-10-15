@@ -23,5 +23,5 @@ css使用tailWindCss框架，postcss
 1、安装依赖:
 npm install
 
-2、重新构建使用命令:
+2、生成css文件:
 npm run build-css
