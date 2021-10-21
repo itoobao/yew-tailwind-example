@@ -1,3 +1,6 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+input{
+    @apply border leading-10 focus:outline-none focus:border-blue-300 rounded shadow w-2/3;
+}
