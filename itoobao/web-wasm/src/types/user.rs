@@ -4,7 +4,7 @@ use serde::{Deserialize, Serialize};
 #[derive(Serialize, Deserialize, Clone, Debug, Default)]
 #[serde(rename_all = "camelCase")]
 pub struct LoginInfo {
-    pub email: String,
+    pub username: String,
     pub password: String,
 }
 

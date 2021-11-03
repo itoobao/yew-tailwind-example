@@ -1,5 +1,7 @@
-# BaseWebWasm
-web服务器基于Axum, 前端页面基于Yew的基础模版
+
+# yew-tailwind-example
+
+rust前端框架yew+css框架tailwind 样例
 工具安装:
 cargo install wasm-pack
 cargo install cargo-make
