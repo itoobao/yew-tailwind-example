@@ -12,6 +12,7 @@ pub struct Index {
 pub enum Msg {
     UserNameMsg(String),
     PasswordMsg(String),
+    Request(HtmlElement),
 }
 impl Component for Index {
     type Message = Msg;
@@ -36,12 +37,21 @@ impl Component for Index {
             Msg::PasswordMsg(pwd) => {
                 self.request.password = pwd;
             }
+            Msg::Request(elem) => {
+                let first_child = elem.first_element_child().expect("no child");
+                first_child.class_list().add_1("hidden");
+                elem.class_list()
+                    .remove_2("bg-gray-300", "cursor-not-allowed");
+                elem.class_list().add_1("bg-blue-500");
+                elem.remove_attribute("disabled");
+                debug!("sleep 3");
+            }
         }
         true
     }
 
     fn view(&self) -> Html {
-        let onclick = Callback::from(|ev: MouseEvent| {
+        let onclick = self.link.callback(|ev: MouseEvent| {
             debug!("button click");
             let elem = ev
                 .target()
@@ -53,6 +63,7 @@ impl Component for Index {
             elem.class_list().remove_1("bg-blue-500");
             elem.class_list().add_2("bg-gray-300", "cursor-not-allowed");
             elem.set_attribute("disabled", "");
+            Msg::Request(elem)
         });
         let oninput_username = self
             .link
