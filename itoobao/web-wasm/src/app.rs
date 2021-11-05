@@ -1,3 +1,4 @@
+use crate::components::Menu;
 use crate::{pages::Index, routes::AppRoute, services::is_authenticated};
 use yew::prelude::*;
 use yew_router::{
@@ -59,7 +60,7 @@ impl Component for App {
         //     html! {<Login />}
         // }
         html! {
-            <Index />
+            <Menu />
         }
     }
 }

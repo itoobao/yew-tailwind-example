@@ -2,7 +2,8 @@
 # yew-tailwind-example
 
 rust前端框架yew+css框架tailwind 样例
-工具安装:
+
+## 工具安装:
 cargo install wasm-pack
 cargo install cargo-make
 cargo install simple-http-server # 提供 assets 服务的简单服务器
