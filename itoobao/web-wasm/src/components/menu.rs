@@ -30,20 +30,23 @@ impl Component for Menu {
                 .dyn_into::<HtmlElement>()
                 .expect("no element");
             //父节点的父节点的第一个元素
-            let node = elem
+            let mut node = elem
                 .parent_node()
                 .unwrap()
                 .parent_element()
                 .unwrap()
-                .first_child()
-                .unwrap();
-            let mut i = 0;
-            while (true) {
-                if let Some(s) = node.next_sibling() {
-                    if s.node_type() == 1 && !elem.is_same_node(Some(&s)) {}
-                } else {
-                    break;
+                .first_element_child();
+            //当前元素的下一个兄弟元素
+            let sibling_elem = elem.next_element_sibling().unwrap();
+            while (node.is_some()) {
+                //子菜单
+                let n = &node.unwrap();
+                if let Some(m) = n.children().get_with_index(1) {
+                    if !m.is_same_node(Some(&sibling_elem)) {
+                        m.class_list().add_1("hidden");
+                    }
                 }
+                node = n.next_element_sibling();
             }
 
             //子菜单处理
@@ -59,16 +62,16 @@ impl Component for Menu {
                     <li class="px-3 py-2  w-1/12 bg-gray-600 border-b-2 cursor-pointer">
                         <p  onclick = &onclick>{"文章管理"}</p>
                         <ul class="duration-300 hidden">
-                            <li class="bg-gray-300">{"文章分类"}</li>
-                            <li>{"文章录入"}</li>
-                            <li>{"文章审核"}</li>
+                            <li class="hover:bg-gray-500">{"文章分类"}</li>
+                            <li class="hover:bg-gray-500">{"文章录入"}</li>
+                            <li class="hover:bg-gray-500">{"文章审核"}</li>
                         </ul>
                     </li>
                     <li class="px-3 py-2  w-1/12 bg-gray-600 border-b-2 cursor-pointer">
                         <p  onclick = &onclick class="t2">{"用户管理"}</p>
                         <ul class="duration-300 hidden">
-                            <li>{"前端用户"}</li>
-                            <li>{"后台用户"}</li>
+                            <li class="hover:bg-gray-500">{"前端用户"}</li>
+                            <li class="hover:bg-gray-500">{"后台用户"}</li>
                         </ul>
                     </li>
                 </ul>
