@@ -22,6 +22,7 @@ impl Component for Menu {
         true
     }
 
+    #[allow(unused)]
     fn view(&self) -> Html {
         let onclick = self.link.callback(|ev: MouseEvent| {
             let elem = ev
