@@ -1,3 +1,3 @@
+mod left;
 mod menu;
-
-pub use menu::Menu;
+pub use left::SideBar;

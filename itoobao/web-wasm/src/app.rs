@@ -1,4 +1,4 @@
-use crate::components::Menu;
+use crate::components::SideBar;
 use crate::{pages::Index, routes::AppRoute, services::is_authenticated};
 use yew::prelude::*;
 use yew_router::{
@@ -60,7 +60,9 @@ impl Component for App {
         //     html! {<Login />}
         // }
         html! {
-            <Menu />
+            <div class="flex h-screen bg-gray-300 font-sans">
+                <SideBar />
+            </div>
         }
     }
 }

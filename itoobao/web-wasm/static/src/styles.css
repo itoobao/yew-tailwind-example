@@ -4,3 +4,10 @@
 .input{
     @apply border leading-4 p-2 focus:outline-none focus:border-blue-300 rounded shadow w-2/3;
 }
+
+.menu_normal{
+    @apply border-gray-900 text-gray-500 hover:bg-gray-600 hover:bg-opacity-25 hover:text-gray-100;
+}
+.menu_active{
+    @apply bg-gray-600 bg-opacity-25 text-gray-100 border-gray-100;
+}
