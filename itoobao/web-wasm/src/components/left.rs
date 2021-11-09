@@ -91,7 +91,6 @@ impl SideBar {
             .dyn_into::<HtmlElement>()
             .unwrap();
 
-        debug!("{}", element.class_name());
         //隐藏所有 非当前菜单的子菜单
         //当前元素的父节点的父节点的第一个子节点
         let mut node = element
@@ -114,6 +113,19 @@ impl SideBar {
                 .unwrap()
                 .class_list()
                 .add_1("menu_normal");
+            let right_icon = n
+                .children()
+                .get_with_index(0)
+                .unwrap()
+                .children()
+                .get_with_index(2);
+            if right_icon.is_some() {
+                right_icon
+                    .clone()
+                    .unwrap()
+                    .class_list()
+                    .remove_1("rotate-180");
+            }
             //子菜单
             if let Some(child) = n.children().get_with_index(1) {
                 //检测和当前元素的子菜单是否一样
@@ -125,14 +137,9 @@ impl SideBar {
                         .unwrap()
                         .class_list()
                         .add_1("menu_active");
-                    n.children()
-                        .get_with_index(0)
-                        .unwrap()
-                        .children()
-                        .get_with_index(2)
-                        .unwrap()
-                        .class_list()
-                        .add_1("rotate-180");
+                    if right_icon.is_some() {
+                        right_icon.unwrap().class_list().add_1("rotate-180");
+                    }
                 }
             }
             node = n.next_element_sibling();
