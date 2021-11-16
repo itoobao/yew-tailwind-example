@@ -1,4 +1,4 @@
-use crate::components::SideBar;
+use crate::components::{Header, SideBar};
 use crate::{pages::Index, routes::AppRoute, services::is_authenticated};
 use yew::prelude::*;
 use yew_router::{
@@ -62,6 +62,9 @@ impl Component for App {
         html! {
             <div class="flex h-screen bg-gray-300 font-sans">
                 <SideBar />
+                <div class="flex-1 flex flex-col overflow-hidden">
+                    <Header />
+                </div>
             </div>
         }
     }
