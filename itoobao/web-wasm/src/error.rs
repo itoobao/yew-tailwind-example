@@ -30,4 +30,8 @@ pub enum Error {
     ///请求错误
     #[error("Http Request Error")]
     RequestError,
+
+    ///业务错误
+    #[error("{0:?}")]
+    BusinessError(String),
 }

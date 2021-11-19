@@ -1,5 +1,5 @@
 use crate::components::{Header, SideBar};
-use crate::{pages::Index, routes::AppRoute, services::is_authenticated};
+use crate::{pages::Login, routes::AppRoute, services::is_authenticated};
 use yew::prelude::*;
 use yew_router::{
     agent::RouteRequest::ChangeRoute,
@@ -45,27 +45,27 @@ impl Component for App {
 
     fn view(&self) -> Html {
         //检测是否登录
-        // if is_authenticated() {
-        //     //路由到子模块
-        //     if let Some(route) = &self.current_route {
-        //         match route {
-        //             AppRoute::Login => html! {"logining"},
-        //             AppRoute::Home => html! {<Index />},
-        //         }
-        //     } else {
-        //         //404
-        //         html! {"No child component available"}
-        //     }
-        // } else {
-        //     html! {<Login />}
-        // }
-        html! {
-            <div class="flex h-screen bg-gray-300 font-sans">
-                <SideBar />
-                <div class="flex-1 flex flex-col overflow-hidden">
-                    <Header />
+        if is_authenticated() {
+            //     //路由到子模块
+            //     if let Some(route) = &self.current_route {
+            //         match route {
+            //             AppRoute::Login => html! {"logining"},
+            //             AppRoute::Home => html! {<Index />},
+            //         }
+            //     } else {
+            //         //404
+            //         html! {"No child component available"}
+            //     }
+            html! {
+                <div class="flex h-screen bg-gray-300 font-sans">
+                    <SideBar />
+                    <div class="flex-1 flex flex-col overflow-hidden">
+                        <Header />
+                    </div>
                 </div>
-            </div>
+            }
+        } else {
+            html! {<Login />}
         }
     }
 }
