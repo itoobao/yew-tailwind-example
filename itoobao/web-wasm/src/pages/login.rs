@@ -64,7 +64,7 @@ impl Component for Login {
                             </path>
                         </svg>
                         <span class="text-2xl font-semibold text-gray-700">
-                            {"租号玩活动管理"}
+                            {"活动管理"}
                         </span>
                     </div>
 
