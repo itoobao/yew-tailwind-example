@@ -1,5 +1,5 @@
+mod menu;
 mod user;
-
 use std::collections::HashMap;
 
 use serde::{Deserialize, Serialize};
@@ -9,4 +9,5 @@ pub struct ErrorInfo {
     pub errors: HashMap<String, Vec<String>>,
 }
 
+pub use menu::Menu;
 pub use user::*;

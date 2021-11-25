@@ -3,7 +3,6 @@ mod app;
 mod components;
 mod error;
 mod pages;
-mod routes;
 mod services;
 mod switch;
 mod types;

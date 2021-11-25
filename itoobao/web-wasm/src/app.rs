@@ -1,14 +1,14 @@
-use crate::components::{Header, SideBar};
-use crate::{pages::Login, routes::AppRoute, services::is_authenticated};
+use crate::components::{Header, Menu, SideBar};
+use crate::switch::{AppRoute, AppRouter, PublicUrlSwitch};
+use crate::{pages::Login, services::is_authenticated};
 use yew::prelude::*;
 use yew_router::{
     agent::RouteRequest::ChangeRoute,
-    prelude::{Route, RouteAgent, RouteService},
-    Switch,
+    prelude::{Route, RouteAgent},
+    switch::Permissive,
 };
 pub struct App {
-    current_route: Option<AppRoute>,
-    route_agent: Box<dyn Bridge<RouteAgent>>,
+    router_agent: Box<dyn Bridge<RouteAgent>>,
 }
 
 pub enum Msg {
@@ -19,14 +19,8 @@ impl Component for App {
     type Message = Msg;
     type Properties = ();
     fn create(props: Self::Properties, _link: ComponentLink<Self>) -> Self {
-        let route_service: RouteService<Route> = RouteService::new();
-        let route = route_service.get_route();
-
-        let route_agent = RouteAgent::bridge(_link.callback(Msg::Route));
-        Self {
-            current_route: AppRoute::switch(route),
-            route_agent,
-        }
+        let router_agent = RouteAgent::bridge(_link.callback(Msg::Route));
+        Self { router_agent }
     }
 
     fn change(&mut self, _props: Self::Properties) -> ShouldRender {
@@ -35,37 +29,71 @@ impl Component for App {
 
     fn rendered(&mut self, _first_render: bool) {
         if _first_render && !is_authenticated() {
-            self.route_agent.send(ChangeRoute(AppRoute::Login.into()));
+            //第一次渲染，未登录 跳转到登录页
+            self.router_agent
+                .send(ChangeRoute(AppRoute::Login.into_route()));
         }
     }
 
     fn update(&mut self, msg: Self::Message) -> ShouldRender {
+        match msg {
+            Msg::Route(route) => {}
+        }
         true
     }
 
     fn view(&self) -> Html {
-        //检测是否登录
         if is_authenticated() {
-            //     //路由到子模块
-            //     if let Some(route) = &self.current_route {
-            //         match route {
-            //             AppRoute::Login => html! {"logining"},
-            //             AppRoute::Home => html! {<Index />},
-            //         }
-            //     } else {
-            //         //404
-            //         html! {"No child component available"}
-            //     }
             html! {
                 <div class="flex h-screen bg-gray-300 font-sans">
-                    <SideBar />
+                    //<SideBar />
+                    <Menu />
                     <div class="flex-1 flex flex-col overflow-hidden">
                         <Header />
                     </div>
+                    <main>
+                        <AppRouter render=AppRouter::render(Self::switch) redirect=AppRouter::redirect(|route: Route| {
+                            AppRoute::PageNotFound(Permissive(Some(route.route))).into_public()
+                        })
+                        />
+                    </main>
                 </div>
+
             }
         } else {
-            html! {<Login />}
+            html! {
+                <Login />
+            }
+        }
+    }
+}
+
+impl App {
+    fn switch(switch: PublicUrlSwitch) -> Html {
+        match switch.route() {
+            AppRoute::Login => {
+                html! {<Login />}
+            }
+            AppRoute::Post(id) => {
+                html! {}
+            }
+            AppRoute::PostListPage(page) => {
+                html! {}
+            }
+            AppRoute::PostList => {
+                html! {"list"}
+            }
+            AppRoute::Author(id) => {
+                html! {}
+            }
+            AppRoute::Home => {
+                html! {"home"}
+            }
+            AppRoute::PageNotFound(Permissive(route)) => {
+                html! {
+                    "not found"
+                }
+            }
         }
     }
 }

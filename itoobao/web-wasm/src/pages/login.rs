@@ -1,13 +1,17 @@
 use yew::prelude::*;
+use yew_router::agent::RouteRequest;
+use yew_router::prelude::RouteAgentDispatcher;
 
 use crate::components::ErrorTips;
 use crate::error::Error;
-use crate::services::set_token;
+use crate::services::{is_authenticated, set_token};
+use crate::switch::AppRoute;
 use crate::types::LoginInfo;
 pub struct Login {
     login_info: LoginInfo,
     error: Option<Error>,
     link: ComponentLink<Self>,
+    route_dispatcher: RouteAgentDispatcher,
 }
 pub enum Msg {
     SetEmail(String),
@@ -23,11 +27,20 @@ impl Component for Login {
             login_info: LoginInfo::default(),
             error: None,
             link,
+            route_dispatcher: RouteAgentDispatcher::new(),
         }
     }
 
     fn change(&mut self, _props: Self::Properties) -> ShouldRender {
         true
+    }
+
+    fn rendered(&mut self, _first_render: bool) {
+        if _first_render && is_authenticated() {
+            //已经登录过，跳转到首页
+            self.route_dispatcher
+                .send(RouteRequest::ChangeRoute(AppRoute::Home.into_route()));
+        }
     }
 
     fn update(&mut self, msg: Self::Message) -> ShouldRender {
@@ -39,6 +52,8 @@ impl Component for Login {
                 //self.error = Some(Error::BusinessError("用户名或密码错误".to_string()));
                 set_token(Some(self.login_info.username.clone()));
                 //跳转到首页
+                self.route_dispatcher
+                    .send(RouteRequest::ChangeRoute(AppRoute::Home.into_route()));
             }
         }
         true

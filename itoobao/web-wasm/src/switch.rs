@@ -65,16 +65,18 @@ impl PublicUrlSwitch {
 
 impl Switch for PublicUrlSwitch {
     fn from_route_part<STATE>(part: String, state: Option<STATE>) -> (Option<Self>, Option<STATE>) {
-        if let Some(part) = part.strip_prefix(&Self::base_path()) {
-            let (route, state) = AppRoute::from_route_part(part.to_owned(), state);
-            (route.map(Self), state)
-        } else {
-            (None, None)
-        }
+        let (route, state) = AppRoute::from_route_part(part.to_owned(), state);
+        (route.map(Self), state)
+        // if let Some(part) = part.strip_prefix(&Self::base_path()) {
+        //     let (route, state) = AppRoute::from_route_part(part.to_owned(), state);
+        //     (route.map(Self), state)
+        // } else {
+        //     (None, None)
+        // }
     }
 
     fn build_route_section<STATE>(self, route: &mut String) -> Option<STATE> {
-        route.push_str(&Self::base_path());
+        //route.push_str(&Self::base_path());
         self.0.build_route_section(route)
     }
 }
