@@ -1,7 +1,7 @@
 use yew::{html::IntoPropValue, web_sys::Url};
 use yew_router::{prelude::*, switch::Permissive};
 
-#[derive(Clone, Debug, Switch)]
+#[derive(Clone, Debug, Switch, PartialEq)]
 pub enum AppRoute {
     #[to = "/login"]
     Login,

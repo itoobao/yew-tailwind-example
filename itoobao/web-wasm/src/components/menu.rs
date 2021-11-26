@@ -1,4 +1,3 @@
-use log::debug;
 use yew::prelude::*;
 
 use crate::types::Menu as TypeMenu;

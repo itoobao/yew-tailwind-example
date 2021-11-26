@@ -1,13 +1,13 @@
+use crate::switch::{AppAnchor, AppRoute};
+use crate::types::Menu;
 use log::debug;
 use yew::prelude::*;
-
-use crate::types::Menu;
 
 #[derive(Clone)]
 pub struct MenuItem {
     link: ComponentLink<Self>,
     props: Props,
-    //大功能区菜单是否处于选中
+    //当前菜单是否处于选中
     menu_active: bool,
 }
 
@@ -15,15 +15,16 @@ pub struct MenuItem {
 pub struct Props {
     //菜单项
     pub menu_list: Menu,
-    //回调
+    //回调-把当前点击的菜单id 回传到父组件，父组件更新所有子组件，子组件根据当前选择的菜单id,设置样式
     pub callback: Callback<u32>,
-    //当前菜单是否 选中
+    //当前选择的菜单id
     pub select_menu_id: u32,
 }
 
-#[derive(Clone, Copy)]
+#[derive(Clone)]
 pub enum Msg {
     ToggleMenu(u32),
+    CurrentRoute(Option<AppRoute>),
 }
 impl Component for MenuItem {
     type Message = Msg;
@@ -54,6 +55,10 @@ impl Component for MenuItem {
                 self.props.callback.emit(id);
                 true
             }
+            Msg::CurrentRoute(route) => {
+                debug!("{:#?}", route);
+                false
+            }
         }
     }
 
@@ -76,7 +81,12 @@ impl Component for MenuItem {
                     {
                         for self.props.menu_list.items.clone().iter().map(|m|{
                             html!{
-                                <span class="block mt-2 px-7 py-1 text-gray-500 hover:bg-gray-600 hover:bg-opacity-25 hover:text-gray-100 cursor-pointer">{m.name.clone()}</span>
+                                <span class="block mt-2 px-7 py-1 text-gray-500 hover:bg-gray-600 hover:bg-opacity-25 hover:text-gray-100 cursor-pointer">
+
+                                <AppAnchor route=AppRoute::PostList>
+                                {m.name.clone()}
+                                </AppAnchor>
+                                </span>
 
                             }
                         })
@@ -118,6 +128,6 @@ impl MenuItem {
     //菜单点击事件
     fn onclick(self) -> Callback<MouseEvent> {
         let r = Msg::ToggleMenu(self.props.menu_list.id);
-        self.link.callback(move |_ev: MouseEvent| r)
+        self.link.callback(move |_ev: MouseEvent| r.clone())
     }
 }

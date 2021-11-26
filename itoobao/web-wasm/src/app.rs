@@ -1,4 +1,4 @@
-use crate::components::{Header, Menu, SideBar};
+use crate::components::{BreadCrumbs, Header, Menu};
 use crate::switch::{AppRoute, AppRouter, PublicUrlSwitch};
 use crate::{pages::Login, services::is_authenticated};
 use yew::prelude::*;
@@ -46,17 +46,22 @@ impl Component for App {
         if is_authenticated() {
             html! {
                 <div class="flex h-screen bg-gray-300 font-sans">
-                    //<SideBar />
                     <Menu />
                     <div class="flex-1 flex flex-col overflow-hidden">
                         <Header />
+
+                        <main class="flex-1 overflow-hidden overflow-y-auto bg-gray-200">
+                            <div class="container mx-auto bg-white h-full">
+                            <BreadCrumbs />
+                            <AppRouter render=AppRouter::render(Self::switch) redirect=AppRouter::redirect(|route: Route| {
+                                AppRoute::PageNotFound(Permissive(Some(route.route))).into_public()
+                            })
+                            />
+                            </div>
+
+                        </main>
                     </div>
-                    <main>
-                        <AppRouter render=AppRouter::render(Self::switch) redirect=AppRouter::redirect(|route: Route| {
-                            AppRoute::PageNotFound(Permissive(Some(route.route))).into_public()
-                        })
-                        />
-                    </main>
+
                 </div>
 
             }
